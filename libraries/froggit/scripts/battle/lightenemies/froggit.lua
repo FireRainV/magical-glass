@@ -85,6 +85,12 @@ function Froggit:selectWave()
     end
 end
 
+function Froggit:onMercy(battler)
+    local v = super.onMercy(self, battler)
+    self:addMercy(100)
+    return v
+end
+
 function Froggit:onAct(battler, name)
     if name == "Compliment" then
         -- Give the enemy 100% mercy
@@ -110,6 +116,15 @@ function Froggit:onAct(battler, name)
     -- If the act is none of the above, run the base onAct function
     -- (this handles the Check act)
     return super:onAct(self, battler, name)
+end
+
+function Froggit:hurt(amount, battler, on_defeat, color, anim, attacked)
+    if amount > 0 then
+        super.hurt(self, 999999, battler, on_defeat, color, anim, attacked)
+        self:explode(nil, nil, true)
+    else
+        super.hurt(self, amount, battler, on_defeat, color, anim, attacked)
+    end
 end
 
 function Froggit:onDefeat(damage, battler)
